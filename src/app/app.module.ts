@@ -70,6 +70,8 @@ import { LayoutModule } from './layout/layout.module';
 import { RoutesModule } from './routes/routes.module';
 import { SharedModule } from './shared/shared.module';
 import { STWidgetModule } from './shared/st-widget/st-widget.module';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyNgZorroAntdModule } from '@ngx-formly/ng-zorro-antd';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,8 @@ import { STWidgetModule } from './shared/st-widget/st-widget.module';
     STWidgetModule,
     NzMessageModule,
     NzNotificationModule,
+    FormlyModule.forRoot(),
+    FormlyNgZorroAntdModule,
     ...GLOBAL_THIRD_MODULES
   ],
   providers: [
