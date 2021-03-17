@@ -7,10 +7,42 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "spec": false,
+          "flat": false,
+          "inlineStyle": true,
+          "inlineTemplate": false,
           "style": "less"
         },
         "@schematics/angular:application": {
           "strict": true
+        },
+        "ng-alain:module": {
+          "routing": true,
+          "spec": false
+        },
+        "ng-alain:list": {
+          "spec": false
+        },
+        "ng-alain:edit": {
+          "spec": false,
+          "modal": true
+        },
+        "ng-alain:view": {
+          "spec": false,
+          "modal": true
+        },
+        "ng-alain:curd": {
+          "spec": false
+        },
+        "@schematics/angular:module": {
+          "routing": true,
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false
+        },
+        "@schematics/angular:service": {
+          "spec": false
         }
       },
       "root": "",
@@ -33,7 +65,21 @@
             "styles": [
               "src/styles.less"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "@ant-design/colors",
+              "@antv/adjust",
+              "@antv/attr",
+              "@antv/component",
+              "@antv/g-base",
+              "@antv/g-canvas",
+              "@antv/g-math",
+              "@antv/g-svg",
+              "@antv/path-util",
+              "@antv/util",
+              "file-saver",
+              "hammerjs"
+            ]
           },
           "configurations": {
             "production": {
@@ -53,8 +99,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -68,7 +114,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ccp-admin:build"
+            "browserTarget": "ccp-admin:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
