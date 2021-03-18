@@ -5,6 +5,7 @@
 
 import {
   AlipayCircleOutline,
+  ApartmentOutline,
   ApiOutline,
   AppstoreOutline,
   ArrowDownOutline,
@@ -56,6 +57,7 @@ import {
 
 export const ICONS_AUTO = [
   AlipayCircleOutline,
+  ApartmentOutline,
   ApiOutline,
   AppstoreOutline,
   ArrowDownOutline,
