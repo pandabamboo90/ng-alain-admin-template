@@ -2,6 +2,7 @@ import { NgModule, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
 import { DelonACLModule } from '@delon/acl';
 import { FormlyModule } from '@ngx-formly/core';
@@ -12,16 +13,12 @@ import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
 
 // #region third libs
-
-const THIRDMODULES: Type<any>[] = [ ];
-
+const THIRDMODULES: Type<any>[] = [];
 // #endregion
 
-// #region your componets & directives
-
+// #region your components & directives
 const COMPONENTS: Type<any>[] = [];
 const DIRECTIVES: Type<any>[] = [];
-
 // #endregion
 
 @NgModule({
@@ -40,7 +37,8 @@ const DIRECTIVES: Type<any>[] = [];
       extras: { lazyRender: true },
       validationMessages: [{ name: 'required', message: 'This field is required' }],
     }),
-    FormlyNgZorroAntdModule
+    FormlyNgZorroAntdModule,
+    DelonFormModule
   ],
   declarations: [
     // your components
@@ -62,7 +60,8 @@ const DIRECTIVES: Type<any>[] = [];
     ...COMPONENTS,
     ...DIRECTIVES,
     FormlyModule,
-    FormlyNgZorroAntdModule
+    FormlyNgZorroAntdModule,
+    DelonFormModule
   ]
 })
 export class SharedModule { }

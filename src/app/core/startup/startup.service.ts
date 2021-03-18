@@ -110,7 +110,7 @@ export class StartupService {
     return new Promise((resolve, reject) => {
       // http
       // this.viaHttp(resolve, reject);
-      // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
+      // mock：Please do not use it in a production environment, viaMock is just to simulate some data so that the scaffolding can run normally at first
       this.viaMock(resolve, reject);
 
     });

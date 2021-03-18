@@ -48,8 +48,13 @@ const INTERCEPTOR_PROVIDES = [
 
 // #region global third module
 const GLOBAL_THIRD_MODULES: Type<any>[] = [];
-
 // #endregion
+
+// #region JSON Schema form (using @delon/form)
+import { JsonSchemaModule } from '@shared';
+const FORM_MODULES = [JsonSchemaModule];
+// #endregion
+
 export function StartupServiceFactory(startupService: StartupService): () => Promise<void> {
   return () => startupService.load();
 }
@@ -83,6 +88,7 @@ const APPINIT_PROVIDES = [
     NzMessageModule,
     NzNotificationModule,
     ...GLOBAL_THIRD_MODULES,
+    ...FORM_MODULES
   ],
   providers: [
     ...LANG_PROVIDES,
