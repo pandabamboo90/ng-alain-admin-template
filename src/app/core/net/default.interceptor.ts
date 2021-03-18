@@ -73,26 +73,26 @@ export class DefaultInterceptor implements HttpInterceptor {
     }
 
     const errortext = CODEMESSAGE[ev.status] || ev.statusText;
-    this.notification.error(`请求错误 ${ev.status}: ${ev.url}`, errortext);
+    this.notification.error(`Request error ${ev.status}: ${ev.url}`, errortext);
   }
 
   /**
-   * 刷新 Token 请求
+   * Refresh token request
    */
   private refreshTokenRequest(): Observable<any> {
     const model = this.tokenSrv.get();
     return this.http.post(`/api/auth/refresh`, null, null, { headers: { refresh_token: model?.refresh_token || '' } });
   }
 
-  // #region 刷新Token方式一：使用 401 重新刷新 Token
+  // #region Refresh Token Method 1: Use 401 to refresh Token
 
   private tryRefreshToken(ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    // 1、若请求为刷新Token请求，表示来自刷新Token可以直接跳转登录页
+    // 1、If the request is a refresh token request, it means that the refresh token can directly jump to the login page
     if ([`/api/auth/refresh`].some((url) => req.url.includes(url))) {
       this.toLogin();
       return throwError(ev);
     }
-    // 2、如果 `refreshToking` 为 `true` 表示已经在请求刷新 Token 中，后续所有请求转入等待状态，直至结果返回后再重新发起请求
+    // 2、If `refreshToking` is `true`, it means that it has been requested to refresh the Token, and all subsequent requests will enter the waiting state until the result is returned before re-initiating the request
     if (this.refreshToking) {
       return this.refreshToken$.pipe(
         filter((v) => !!v),
@@ -100,18 +100,18 @@ export class DefaultInterceptor implements HttpInterceptor {
         switchMap(() => next.handle(this.reAttachToken(req))),
       );
     }
-    // 3、尝试调用刷新 Token
+    // 3、Try to call refresh token
     this.refreshToking = true;
     this.refreshToken$.next(null);
 
     return this.refreshTokenRequest().pipe(
       switchMap((res) => {
-        // 通知后续请求继续执行
+        // Notify subsequent requests to continue execution
         this.refreshToking = false;
         this.refreshToken$.next(res);
-        // 重新保存新 token
+        // Resave the new token
         this.tokenSrv.set(res);
-        // 重新发起请求
+        // Re-initiate request
         return next.handle(this.reAttachToken(req));
       }),
       catchError((err) => {
@@ -123,12 +123,12 @@ export class DefaultInterceptor implements HttpInterceptor {
   }
 
   /**
-   * 重新附加新 Token 信息
+   * Re-attach new token information
    *
-   * > 由于已经发起的请求，不会再走一遍 `@delon/auth` 因此需要结合业务情况重新附加新的 Token
+   * > Because of the request that has already been initiated, we will not go through `@delon/auth` again, so we need to reattach a new Token based on the business situation
    */
   private reAttachToken(req: HttpRequest<any>): HttpRequest<any> {
-    // 以下示例是以 NG-ALAIN 默认使用 `SimpleInterceptor`
+    // The following example is based on NG-ALAIN using `SimpleInterceptor` by default
     const token = this.tokenSrv.get()?.token;
     return req.clone({
       setHeaders: {
@@ -139,7 +139,7 @@ export class DefaultInterceptor implements HttpInterceptor {
 
   // #endregion
 
-  // #region 刷新Token方式二：使用 `@delon/auth` 的 `refresh` 接口
+  // #region Token refresh method 2: Use the `refresh` interface of `@delon/auth`
 
   private buildAuthRefresh(): void {
     if (!this.refreshTokenEnabled) {
@@ -174,7 +174,7 @@ export class DefaultInterceptor implements HttpInterceptor {
 
   private handleData(ev: HttpResponseBase, req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     this.checkStatus(ev);
-    // 业务处理：一些通用操作
+    // Business processing: some common operations
     switch (ev.status) {
       case 200:
         // 业务层级错误处理，以下是假定restful有一套统一输出格式（指不管成功与否都有相应的数据格式）情况下进行处理
@@ -211,7 +211,7 @@ export class DefaultInterceptor implements HttpInterceptor {
       default:
         if (ev instanceof HttpErrorResponse) {
           console.warn(
-            '未可知错误，大部分是由于后端不支持跨域CORS或无效配置引起，请参考 https://ng-alain.com/docs/server 解决跨域问题',
+            'Unknown errors, mostly caused by the backend does not support cross-domain CORS or invalid configuration, please refer to https://ng-alain.com/docs/server to solve cross-domain issues',
             ev,
           );
         }
@@ -235,7 +235,7 @@ export class DefaultInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // 统一加上服务端前缀
+    // Uniformly add server prefix
     let url = req.url;
     if (!url.startsWith('https://') && !url.startsWith('http://')) {
       url = environment.api.baseUrl + url;
@@ -244,11 +244,11 @@ export class DefaultInterceptor implements HttpInterceptor {
     const newReq = req.clone({ url, setHeaders: this.getAdditionalHeaders(req.headers) });
     return next.handle(newReq).pipe(
       mergeMap((ev) => {
-        // 允许统一对请求错误处理
+        // Allow unified handling of request errors
         if (ev instanceof HttpResponseBase) {
           return this.handleData(ev, newReq, next);
         }
-        // 若一切都正常，则后续操作
+        // If everything is normal, follow up operations
         return of(ev);
       }),
       catchError((err: HttpErrorResponse) => this.handleData(err, newReq, next)),
