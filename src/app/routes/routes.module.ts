@@ -1,7 +1,5 @@
 import { NgModule, Type } from '@angular/core';
 import { SharedModule } from '@shared';
-// dashboard pages
-import { DashboardComponent } from './dashboard/dashboard.component';
 // single pages
 import { CallbackComponent } from './passport/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -12,7 +10,6 @@ import { UserRegisterComponent } from './passport/register/register.component';
 import { RouteRoutingModule } from './routes-routing.module';
 
 const COMPONENTS: Type<void>[] = [
-  DashboardComponent,
   // passport pages
   UserLoginComponent,
   UserRegisterComponent,

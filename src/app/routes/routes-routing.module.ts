@@ -5,8 +5,6 @@ import { environment } from '@env/environment';
 // layout
 import { LayoutBasicComponent } from '../layout/basic/basic.component';
 import { LayoutPassportComponent } from '../layout/passport/passport.component';
-// dashboard pages
-import { DashboardComponent } from './dashboard/dashboard.component';
 // single pages
 import { CallbackComponent } from './passport/callback.component';
 import { UserLockComponent } from './passport/lock/lock.component';
@@ -21,9 +19,10 @@ const routes: Routes = [
     component: LayoutBasicComponent,
     canActivate: [SimpleGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
+      { path: '', redirectTo: 'admin', pathMatch: 'full' },
       { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
+      { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule) },
+    ],
   },
   // 空白布局
   // {
@@ -39,9 +38,13 @@ const routes: Routes = [
     children: [
       { path: 'login', component: UserLoginComponent, data: { title: '登录', titleI18n: 'pro-login' } },
       { path: 'register', component: UserRegisterComponent, data: { title: '注册', titleI18n: 'pro-register' } },
-      { path: 'register-result', component: UserRegisterResultComponent, data: { title: '注册结果', titleI18n: 'pro-register-result' } },
+      {
+        path: 'register-result',
+        component: UserRegisterResultComponent,
+        data: { title: '注册结果', titleI18n: 'pro-register-result' },
+      },
       { path: 'lock', component: UserLockComponent, data: { title: '锁屏', titleI18n: 'lock' } },
-    ]
+    ],
   },
   // 单页不包裹Layout
   { path: 'passport/callback/:type', component: CallbackComponent },
@@ -56,8 +59,9 @@ const routes: Routes = [
         // NOTICE: If you use `reuse-tab` component and turn on keepingScroll you can set to `disabled`
         // Pls refer to https://ng-alain.com/components/reuse-tab
         scrollPositionRestoration: 'top',
-      }
+      },
     )],
   exports: [RouterModule],
 })
-export class RouteRoutingModule { }
+export class RouteRoutingModule {
+}
