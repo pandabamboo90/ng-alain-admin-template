@@ -1,3 +1,6 @@
+// Interfaces
+export * from './interface/response-meta';
+
 // Components
 
 // Utils

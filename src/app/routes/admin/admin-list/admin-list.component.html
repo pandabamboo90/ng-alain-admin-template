@@ -9,9 +9,10 @@
       [data]="data"
       [columns]="columns"
       [total]="meta.total"
-      [ps]="meta.ps"
-      [pi]="meta.pi"
+      [ps]="meta.per_page"
+      [pi]="meta.page"
       [page]="{front: false}"
+      [loading]="loading"
       (change)="onPageChange($event)"
   >
   </st>

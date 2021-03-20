@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { STChange, STColumn, STComponent, STData } from '@delon/abc/st';
 import { _HttpClient, ModalHelper } from '@delon/theme';
+import { IResponseMeta } from '@shared';
 
 @Component({
   selector: 'app-admin-admin-list',
@@ -8,11 +9,12 @@ import { _HttpClient, ModalHelper } from '@delon/theme';
 })
 export class AdminAdminListComponent implements OnInit {
 
+  loading = false;
   data: STData[] = [];
-  meta = {
+  meta: IResponseMeta = {
     total: 0,
-    ps: 10, // page size
-    pi: 1, // page index
+    per_page: 10, // page size
+    page: 1, // page index
   };
 
   @ViewChild('st') private readonly st!: STComponent;
@@ -68,14 +70,15 @@ export class AdminAdminListComponent implements OnInit {
   }
 
   fetchAdminList(): void {
+    this.loading = true;
     this.http.get('/admins', {
-        'page[size]': 1,
-        'page[number]': this.meta.pi,
+        'page[size]': this.meta.per_page,
+        'page[number]': this.meta.page,
       })
       .subscribe((res) => {
         this.data = res.data;
         this.meta = res.meta;
-        this.cdr.detectChanges();
+        this.loading = false;
       });
   }
 
