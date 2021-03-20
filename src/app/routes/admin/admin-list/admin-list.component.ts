@@ -84,7 +84,7 @@ export class AdminAdminListComponent implements OnInit {
 
   onPageChange(ev: STChange): void {
     if (ev.type === 'pi') {
-      this.meta.pi = ev.pi;
+      this.meta.page = ev.pi;
       this.fetchAdminList();
     }
   }
