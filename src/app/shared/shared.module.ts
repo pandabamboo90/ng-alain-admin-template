@@ -5,8 +5,6 @@ import { RouterModule } from '@angular/router';
 import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
 import { DelonACLModule } from '@delon/acl';
-import { FormlyModule } from '@ngx-formly/core';
-import { FormlyNgZorroAntdModule } from '@ngx-formly/ng-zorro-antd';
 
 
 import { SHARED_DELON_MODULES } from './shared-delon.module';
@@ -33,11 +31,6 @@ const DIRECTIVES: Type<any>[] = [];
     ...SHARED_ZORRO_MODULES,
     // third libs
     ...THIRDMODULES,
-    FormlyModule.forRoot({
-      extras: { lazyRender: true },
-      validationMessages: [{ name: 'required', message: 'This field is required' }],
-    }),
-    FormlyNgZorroAntdModule,
     DelonFormModule
   ],
   declarations: [
@@ -59,8 +52,6 @@ const DIRECTIVES: Type<any>[] = [];
     // your components
     ...COMPONENTS,
     ...DIRECTIVES,
-    FormlyModule,
-    FormlyNgZorroAntdModule,
     DelonFormModule
   ]
 })
