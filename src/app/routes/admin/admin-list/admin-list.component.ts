@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { STChange, STColumn, STComponent, STData } from '@delon/abc/st';
 import { _HttpClient, ModalHelper } from '@delon/theme';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IResponseMeta } from '@shared';
 
+@UntilDestroy()
 @Component({
   selector: 'app-admin-admin-list',
   templateUrl: './admin-list.component.html',
@@ -75,6 +77,7 @@ export class AdminAdminListComponent implements OnInit {
         'page[size]': this.meta.per_page,
         'page[number]': this.meta.page,
       })
+      .pipe(untilDestroyed(this))
       .subscribe((res) => {
         this.data = res.data;
         this.meta = res.meta;
