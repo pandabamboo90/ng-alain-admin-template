@@ -2,7 +2,7 @@
 // register angular
 import { registerLocaleData } from '@angular/common';
 // #region Http Interceptors
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // #region default language
 // Reference: https://ng-alain.com/docs/i18n
 import { default as ngLang } from '@angular/common/locales/en';
@@ -10,9 +10,10 @@ import { APP_INITIALIZER, LOCALE_ID, NgModule, Type } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // #region Startup Service
-import { DefaultInterceptor, StartupService } from '@core';
-import { SimpleInterceptor } from '@delon/auth';
+import { DefaultInterceptor, DeviseTokenAuthInterceptor, StartupService } from '@core';
+import { DelonAuthModule } from '@delon/auth';
 import { DELON_LOCALE, en_US as delonLang } from '@delon/theme';
+import { SharedModule } from '@shared';
 import { zhCN as dateLang } from 'date-fns/locale';
 import { en_US as zorroLang, NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { NzMessageModule } from 'ng-zorro-antd/message';
@@ -22,7 +23,6 @@ import { CoreModule } from './core/core.module';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
 import { RoutesModule } from './routes/routes.module';
-import { SharedModule } from './shared/shared.module';
 import { STWidgetModule } from './shared/st-widget/st-widget.module';
 
 const LANG = {
@@ -41,7 +41,7 @@ const LANG_PROVIDES = [
 ];
 // #endregion
 const INTERCEPTOR_PROVIDES = [
-  { provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: DeviseTokenAuthInterceptor, multi: true },
   { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
 ];
 // #endregion
@@ -87,6 +87,7 @@ const APPINIT_PROVIDES = [
     STWidgetModule,
     NzMessageModule,
     NzNotificationModule,
+    DelonAuthModule,
     ...GLOBAL_THIRD_MODULES,
     ...FORM_MODULES
   ],
