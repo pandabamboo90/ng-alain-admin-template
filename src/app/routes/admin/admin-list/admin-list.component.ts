@@ -1,40 +1,65 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { STColumn, STComponent } from '@delon/abc/st';
-import { SFSchema } from '@delon/form';
-import { ModalHelper, _HttpClient } from '@delon/theme';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { STChange, STColumn, STComponent, STData } from '@delon/abc/st';
+import { _HttpClient, ModalHelper } from '@delon/theme';
 
 @Component({
   selector: 'app-admin-admin-list',
   templateUrl: './admin-list.component.html',
 })
 export class AdminAdminListComponent implements OnInit {
-  url = `/user`;
-  searchSchema: SFSchema = {
-    properties: {
-      no: {
-        type: 'string',
-        title: '编号'
-      }
-    }
+
+  data: STData[] = [];
+  meta = {
+    total: 0,
+    ps: 10, // page size
+    pi: 1, // page index
   };
+
   @ViewChild('st') private readonly st!: STComponent;
   columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
+    { title: '#', index: 'id' },
+    { title: '名前', index: 'first_name' },
+    { title: '名前', index: 'last_name' },
+    { title: '有効', index: 'status' },
+    { title: 'メール', index: 'email' },
+    { title: '組織', index: 'tenant_name' },
+    { title: '役割', index: 'role' },
     {
       title: '',
       buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
-      ]
-    }
+        {
+          text: '編集',
+          icon: 'edit',
+          click: (item: any) => {
+            console.log(item);
+          },
+        },
+        {
+          text: '削除',
+          className: 'text-red',
+          icon: 'delete',
+          type: 'del',
+          pop: {
+            title: 'Are you sure ?',
+            okType: 'danger',
+            icon: 'check-circle',
+          },
+          click: (record, _modal, comp) => {
+            comp!.removeRow(record);
+          },
+        },
+      ],
+    },
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  constructor(private http: _HttpClient,
+              private modal: ModalHelper,
+              private cdr: ChangeDetectorRef) {
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.fetchAdminList();
+  }
 
   add(): void {
     // this.modal
@@ -42,4 +67,22 @@ export class AdminAdminListComponent implements OnInit {
     //   .subscribe(() => this.st.reload());
   }
 
+  fetchAdminList(): void {
+    this.http.get('/admins', {
+        'page[size]': 1,
+        'page[number]': this.meta.pi,
+      })
+      .subscribe((res) => {
+        this.data = res.data;
+        this.meta = res.meta;
+        this.cdr.detectChanges();
+      });
+  }
+
+  onPageChange(ev: STChange): void {
+    if (ev.type === 'pi') {
+      this.meta.pi = ev.pi;
+      this.fetchAdminList();
+    }
+  }
 }
