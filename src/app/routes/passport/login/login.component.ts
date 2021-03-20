@@ -1,11 +1,10 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StartupService } from '@core';
 import { DA_SERVICE_TOKEN, ITokenModel, ITokenService, SocialService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
-import { FormlyFieldConfig } from '@ngx-formly/core/lib/components/formly.field.config';
 
 @Component({
   selector: 'passport-login',
@@ -15,33 +14,10 @@ import { FormlyFieldConfig } from '@ngx-formly/core/lib/components/formly.field.
 })
 export class UserLoginComponent implements OnInit {
 
-  form = new FormGroup({});
-  fields: FormlyFieldConfig[] = [
-    // Email
-    {
-      key: 'email',
-      type: 'input',
-      templateOptions: {
-        type: 'text',
-        label: 'Email',
-        placeholder: 'Email',
-        required: true,
-      },
-    },
-    // Password
-    {
-      key: 'password',
-      type: 'input',
-      templateOptions: {
-        type: 'password',
-        label: 'Password',
-        required: true,
-      },
-    },
-  ];
+  validateForm!: FormGroup;
 
   constructor(
-    fb: FormBuilder,
+    private fb: FormBuilder,
     private router: Router,
     public http: HttpClient,
     private settingsService: SettingsService,
@@ -51,14 +27,16 @@ export class UserLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.validateForm = this.fb.group({
+      email: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      remember: [true],
+    });
   }
 
   submit(): void {
     this.http
-      .post('/auth_admin/sign_in?_allow_anonymous=true', {
-        email: this.form.value.email,
-        password: this.form.value.password,
-      }, { observe: 'response' })
+      .post('/auth_admin/sign_in?_allow_anonymous=true', this.validateForm.value, { observe: 'response' })
       .subscribe((res: HttpResponse<any>) => {
         const credentials = JSON.stringify({
           accessToken: res.headers.get('access-token') || '',
