@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { STChange, STColumn, STComponent, STData } from '@delon/abc/st';
-import { _HttpClient, ModalHelper } from '@delon/theme';
+import { _HttpClient } from '@delon/theme';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { IResponseMeta } from '@shared';
 
@@ -23,7 +24,7 @@ export class AdminAdminListComponent implements OnInit {
   columns: STColumn[] = [
     { title: '#', index: 'id' },
     { title: '名前', index: 'first_name' },
-    { title: '名前', index: 'last_name' },
+    { title: '苗字', index: 'last_name' },
     { title: '有効', index: 'status' },
     { title: 'メール', index: 'email' },
     { title: '組織', index: 'tenant_name' },
@@ -35,7 +36,7 @@ export class AdminAdminListComponent implements OnInit {
           text: '編集',
           icon: 'edit',
           click: (item: any) => {
-            console.log(item);
+            this.router.navigateByUrl(`/admin/${item.id}/edit`);
           },
         },
         {
@@ -57,8 +58,7 @@ export class AdminAdminListComponent implements OnInit {
   ];
 
   constructor(private http: _HttpClient,
-              private modal: ModalHelper,
-              private cdr: ChangeDetectorRef) {
+              private router: Router) {
   }
 
   ngOnInit(): void {
