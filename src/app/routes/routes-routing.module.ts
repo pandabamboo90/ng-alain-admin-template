@@ -22,6 +22,9 @@ const routes: Routes = [
       { path: '', redirectTo: 'admin', pathMatch: 'full' },
       { path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule) },
       { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule) },
+      { path: 'tenant', loadChildren: () => import('./tenant/tenant.module').then((m) => m.TenantModule) },
+      { path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.UserModule) },
+      { path: 'ticket', loadChildren: () => import('./ticket/ticket.module').then((m) => m.TicketModule) },
     ],
   },
   // 空白布局

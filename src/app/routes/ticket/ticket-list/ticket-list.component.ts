@@ -7,10 +7,10 @@ import { IResponseMeta } from '@shared';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-admin-admin-list',
-  templateUrl: './admin-list.component.html',
+  selector: 'app-ticket-ticket-list',
+  templateUrl: './ticket-list.component.html',
 })
-export class AdminAdminListComponent implements OnInit {
+export class TicketTicketListComponent implements OnInit {
 
   loading = false;
   data: STData[] = [];
@@ -26,6 +26,8 @@ export class AdminAdminListComponent implements OnInit {
     { title: 'First Name', index: 'first_name' },
     { title: 'Last Name', index: 'last_name' },
     { title: 'Email', index: 'email' },
+    { title: 'Country code', index: 'country_code' },
+    { title: 'Phone number', index: 'cellphone' },
     { title: 'KYC passed', index: 'kyc_passed', type: 'yn' },
     { title: 'Wallet ID', render: 'wallets-cell-tpl'},
     { title: 'Tenant', index: 'tenant.display_name' },
@@ -36,7 +38,7 @@ export class AdminAdminListComponent implements OnInit {
           text: 'Edit',
           icon: 'edit',
           click: (item: any) => {
-            this.router.navigateByUrl(`/admin/${item.id}`);
+            this.router.navigateByUrl(`/ticket/${item.id}`);
           },
         },
         {
@@ -62,16 +64,16 @@ export class AdminAdminListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchAdminList();
+    this.fetchTicketList();
   }
 
   add(): void {
-    this.router.navigateByUrl(`/admin/new`);
+    this.router.navigateByUrl(`/ticket/new`);
   }
 
-  fetchAdminList(): void {
+  fetchTicketList(): void {
     this.loading = true;
-    this.http.get('/admin/admins', {
+    this.http.get('/admin/tickets', {
         'page[size]': this.meta.per_page,
         'page[number]': this.meta.page,
       })
@@ -86,7 +88,7 @@ export class AdminAdminListComponent implements OnInit {
   onPageChange(ev: STChange): void {
     if (ev.type === 'pi') {
       this.meta.page = ev.pi;
-      this.fetchAdminList();
+      this.fetchTicketList();
     }
   }
 }

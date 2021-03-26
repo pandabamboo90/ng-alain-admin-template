@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Injector } from '@angular/core';
 import { ACLService } from '@delon/acl';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
-import { MenuService, SettingsService, TitleService } from '@delon/theme';
+import { _HttpClient, MenuService, SettingsService, TitleService } from '@delon/theme';
 
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { zip } from 'rxjs';
@@ -23,7 +22,7 @@ export class StartupService {
     private aclService: ACLService,
     private titleService: TitleService,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-    private httpClient: HttpClient,
+    private http: _HttpClient,
     private injector: Injector,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
@@ -31,7 +30,7 @@ export class StartupService {
 
   private viaHttp(resolve: any, reject: any): void {
     zip(
-      this.httpClient.get('assets/tmp/app-data.json'),
+      this.http.get('assets/app-data.json', { skip_interceptor: true }),
     ).pipe(
       catchError((res) => {
         console.warn(`StartupService.load: Network request failed`, res);
@@ -69,11 +68,11 @@ export class StartupService {
     // mock
     const app: any = {
       name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`
+      description: `Ng-zorro admin panel front-end framework`,
     };
     const user: any = {
       name: 'Admin',
-      avatar: './assets/tmp/img/avatar.jpg',
+      avatar: './assets/img/avatar.svg',
       email: 'cipchk@qq.com',
       token: '123456789',
     };

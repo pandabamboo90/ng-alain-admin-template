@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "CCP Admin",
+    "description": ""
+  },
+  "user": {
+    "name": "Super Admin",
+    "avatar": "./assets/img/avatar.svg",
+    "email": "sup_admin@example.com"
+  },
+  "menu": [
+    {
+      "text": "Management",
+      "group": true,
+      "hideInBreadcrumb": true,
+      "children": [
+        {
+          "text": "Admins",
+          "icon": "anticon-user",
+          "link": "/admin/list"
+        },
+        {
+          "text": "Tenants",
+          "icon": "anticon-apartment",
+          "link": "/tenant/list"
+        },
+        {
+          "text": "Users",
+          "icon": "anticon-team",
+          "link": "/user/list"
+        },
+        {
+          "text": "Ticket",
+          "icon": "anticon-transaction",
+          "link": "/ticket/list"
+        }
+      ]
+    }
+  ]
+}

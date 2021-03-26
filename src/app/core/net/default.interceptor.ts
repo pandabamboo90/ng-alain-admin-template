@@ -204,7 +204,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         this.toLogin();
         break;
       case 403:
-      case 404:
+      // case 404:
       case 500:
         this.goTo(`/exception/${ev.status}`);
         break;
@@ -237,7 +237,7 @@ export class DefaultInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Uniformly add server prefix
     let url = req.url;
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+    if (!url.startsWith('https://') && !url.startsWith('http://') && !req.params.has('skip_interceptor')) {
       url = environment.api.baseUrl + url;
     }
 

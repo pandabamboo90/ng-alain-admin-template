@@ -1,0 +1,19 @@
+<page-header [action]="phActionTpl">
+  <ng-template #phActionTpl>
+    <button (click)="add()" nz-button nzType="primary">新建</button>
+  </ng-template>
+</page-header>
+<nz-card>
+
+  <st #st
+      [data]="data"
+      [columns]="columns"
+      [total]="meta.total"
+      [ps]="meta.per_page"
+      [pi]="meta.page"
+      [page]="{front: false}"
+      [loading]="loading"
+      (change)="onPageChange($event)"
+  >
+  </st>
+</nz-card>

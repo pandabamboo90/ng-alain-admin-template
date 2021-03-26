@@ -6,8 +6,7 @@ import { AdminAdminListComponent } from './admin-list/admin-list.component';
 const routes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
   { path: 'list', component: AdminAdminListComponent },
-  { path: 'new', component: AdminAdminEditComponent },
-  { path: ':id/edit', component: AdminAdminEditComponent },
+  { path: ':id', component: AdminAdminEditComponent },
 ];
 
 @NgModule({

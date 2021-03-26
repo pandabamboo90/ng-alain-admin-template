@@ -7,10 +7,10 @@ import { IResponseMeta } from '@shared';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-admin-admin-list',
-  templateUrl: './admin-list.component.html',
+  selector: 'app-tenant-tenant-list',
+  templateUrl: './tenant-list.component.html',
 })
-export class AdminAdminListComponent implements OnInit {
+export class TenantTenantListComponent implements OnInit {
 
   loading = false;
   data: STData[] = [];
@@ -23,24 +23,19 @@ export class AdminAdminListComponent implements OnInit {
   @ViewChild('st') private readonly st!: STComponent;
   columns: STColumn[] = [
     { title: '#', index: 'id' },
-    { title: 'First Name', index: 'first_name' },
-    { title: 'Last Name', index: 'last_name' },
-    { title: 'Email', index: 'email' },
-    { title: 'KYC passed', index: 'kyc_passed', type: 'yn' },
-    { title: 'Wallet ID', render: 'wallets-cell-tpl'},
-    { title: 'Tenant', index: 'tenant.display_name' },
+    { title: 'Display Name', index: 'display_name' },
     {
       title: '',
       buttons: [
         {
-          text: 'Edit',
+          text: '編集',
           icon: 'edit',
           click: (item: any) => {
-            this.router.navigateByUrl(`/admin/${item.id}`);
+            this.router.navigateByUrl(`/tenant/${item.id}/edit`);
           },
         },
         {
-          text: 'Delete',
+          text: '削除',
           className: 'text-red',
           icon: 'delete',
           type: 'del',
@@ -62,16 +57,18 @@ export class AdminAdminListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchAdminList();
+    this.fetchTenantList();
   }
 
   add(): void {
-    this.router.navigateByUrl(`/admin/new`);
+    // this.modal
+    //   .createStatic(FormEditComponent, { i: { id: 0 } })
+    //   .subscribe(() => this.st.reload());
   }
 
-  fetchAdminList(): void {
+  fetchTenantList(): void {
     this.loading = true;
-    this.http.get('/admin/admins', {
+    this.http.get('/admin/tenants', {
         'page[size]': this.meta.per_page,
         'page[number]': this.meta.page,
       })
@@ -86,7 +83,7 @@ export class AdminAdminListComponent implements OnInit {
   onPageChange(ev: STChange): void {
     if (ev.type === 'pi') {
       this.meta.page = ev.pi;
-      this.fetchAdminList();
+      this.fetchTenantList();
     }
   }
 }
